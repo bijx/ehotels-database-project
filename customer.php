@@ -85,7 +85,7 @@
 			      <input type="number" value="5" name="totalRooms" min="0" class="form-control" id="totalRooms">
 			    </div>
 			    <div class="form-group col-md-6">
-			      <label for="price">Price of Room</label>
+			      <label for="price">Min Price of Room</label>
 			      <input type="text" value="500" name="price" class="form-control" id="price">
 			    </div>
 			  </div>
