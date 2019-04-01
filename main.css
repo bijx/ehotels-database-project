@@ -80,7 +80,7 @@ body{
 
 .content{
     position: relative;
-    margin-top: 15%;
+    margin-top: 5%;
     -webkit-transition-duration:1.3s;
     transition-duration:1.3s;
 }
