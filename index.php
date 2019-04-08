@@ -55,7 +55,7 @@
 
             <div class="authfield">
             	<form action="" method="post">
-            	<br>
+            		<br>
             		<h2>Sign in</h2>
 					<input type="text" name="SSN" placeholder="SSN"><br><br>
 					<input id="r1" type="radio" name="r1" value="customer" checked>Customer

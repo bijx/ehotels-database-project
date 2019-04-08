@@ -1,20 +1,14 @@
 <?php
 	session_start();
 	$db_connection = pg_connect("host=ec2-107-20-177-161.compute-1.amazonaws.com dbname=dolhm4vbocfne user=hsfaekqhyucjbw password=8f044502346b09fa315753963d40c52902498d96f74c4c9b61ce5c3f0f627c22");
-	if(isset($_POST['submit'])){
-		
-		$result = pg_query($db_connection, 'select distinct "hotelName","roomCapacity","price","rating","RoomID","viewType" from "public"."Room", "public"."Hotel", "public"."HotelChains" where "hotelName" = \''.$_SESSION['search'][2].'\' and "roomCapacity" = '.$_SESSION['search'][4].' and "price" > '.$_SESSION['search'][6].' and "rating" = '.$_SESSION['search'][3].' order by "price" asc');
 
-		if(pg_query($db_connection, 'SELECT "roomID" FROM "Booked_To" WHERE "roomID"='.pg_fetch_array($result)[$_POST['bookingID']][11]) != ""){
-			
-			pg_query($db_connection, 'update "Customer" SET ("customerAdddress","customerName")=(\''.$_POST['address'].'\',\''.$_POST['bookerName'].'\') WHERE "cSSN"='.$_SESSION['user_SSN'].';');
 
-		}else{
-			echo "you are gay";
-		}
+		//$result = pg_query($db_connection, 'select distinct "hotelName","roomCapacity","price","rating","RoomID","viewType" from "public"."Room", "public"."Hotel", "public"."HotelChains" where "hotelName" = \''.$_SESSION['search'][2].'\' and "roomCapacity" = '.$_SESSION['search'][4].' and "price" > '.$_SESSION['search'][6].' and "rating" = '.$_SESSION['search'][3].' order by "price" asc');
 
-		//header("Location: customer-search.php");
-	}
+	$array = array();
+	$i = 0;
+
+	
 ?>
 
 
@@ -84,6 +78,9 @@
 			                </tr>
 
 			            <?php
+			            	$tempArray = array($row['hotelName'],$row['RoomID'],$row['price'],$row['roomCapacity'],$row['viewType']);
+			            	array_push($array,$tempArray);
+			            	//print_r($array);
 			            }
 			            ?>
 				  </tbody>
@@ -118,7 +115,7 @@
 			      <input type="text" placeholder="Address" name="address" class="form-control" id="address" required>
 			    </div>
 			  </div>
-			  <button name="submit" class="btn btn-primary">Book</button>
+			  <button type="submit" name="submit" class="btn btn-primary">Book</button>
 			</form>
 			<br>
 			</div>
@@ -126,3 +123,21 @@
 	</body>
 
 </html>
+
+
+<?php
+	//print_r($_POST['checkin']);
+	$i=0;
+	if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
+		
+		//if(pg_query($db_connection, 'SELECT "roomID" FROM "Booked_To" WHERE "roomID"='.pg_fetch_array($result)[$_POST['bookingID']][11]) != ""){
+		$i=$_POST['bookingID'];
+
+		pg_query($db_connection, 'update "Customer" SET ("customerAdddress","customerName")=(\''.$_POST['address'].'\',\''.$_POST['bookerName'].'\') WHERE "cSSN"='.$_SESSION['user_SSN'].';');
+
+		pg_query($db_connection, 'INSERT INTO "public"."Bookings_Rentings" VALUES (random() * 99999 + 2, '.$array[$i][2].', false, '.$array[$i][1].', '.$_SESSION['user_SSN'].', \''.$_POST['checkin'].'\',null,\''.$array[$i][0].'\',true);');
+		header("Location: customer.php");
+
+	}
+
+?>
