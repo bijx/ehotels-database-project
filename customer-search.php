@@ -6,7 +6,8 @@
 		//$result = pg_query($db_connection, 'select distinct "hotelName","roomCapacity","price","rating","RoomID","viewType" from "public"."Room", "public"."Hotel", "public"."HotelChains" where "hotelName" = \''.$_SESSION['search'][2].'\' and "roomCapacity" = '.$_SESSION['search'][4].' and "price" > '.$_SESSION['search'][6].' and "rating" = '.$_SESSION['search'][3].' order by "price" asc');
 
 	$array = array();
-	$i = 0;
+	//print_r($_POST['checkin']);
+	
 
 	
 ?>
@@ -41,6 +42,7 @@
 		    </form>
 		  </div>
 		</nav>
+		
 
 		<div class="container">
 			<br>
@@ -57,7 +59,7 @@
 						<th scope="col">Room Number</th>
 						<th scope="col">Price ($)</th>
 						<th scope="col">Room Capacity</th>
-						<th scope="col">View Type</th>
+						<th scope="col">Mountain View</th>
 				    </tr>
 				  </thead>
 				  <tbody>
@@ -122,22 +124,20 @@
 		</div>
 	</body>
 
+
 </html>
 
 
 <?php
-	//print_r($_POST['checkin']);
 	$i=0;
 	if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])){
 		
 		//if(pg_query($db_connection, 'SELECT "roomID" FROM "Booked_To" WHERE "roomID"='.pg_fetch_array($result)[$_POST['bookingID']][11]) != ""){
 		$i=$_POST['bookingID'];
-
+		print($i);
 		pg_query($db_connection, 'update "Customer" SET ("customerAdddress","customerName")=(\''.$_POST['address'].'\',\''.$_POST['bookerName'].'\') WHERE "cSSN"='.$_SESSION['user_SSN'].';');
 
 		pg_query($db_connection, 'INSERT INTO "public"."Bookings_Rentings" VALUES (random() * 99999 + 2, '.$array[$i][2].', false, '.$array[$i][1].', '.$_SESSION['user_SSN'].', \''.$_POST['checkin'].'\',null,\''.$array[$i][0].'\',true);');
-		header("Location: customer.php");
-
+		echo('<script type="text/javascript">location.href = \'index.php?booksuccess=true\';</script>');
 	}
-
 ?>

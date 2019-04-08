@@ -51,7 +51,7 @@
 
 		<div class="container">
 			<br>
-			<h1>Bookings</h1>
+			<h1>Rentings</h1>
 			<div class="container">
 				<table class="table table-dark">
 				  <thead>
@@ -67,7 +67,7 @@
 				  	<?php
 					  	$db_connection = pg_connect("host=ec2-107-20-177-161.compute-1.amazonaws.com dbname=dolhm4vbocfne user=hsfaekqhyucjbw password=8f044502346b09fa315753963d40c52902498d96f74c4c9b61ce5c3f0f627c22");
 
-						$result = pg_query($db_connection, 'SELECT * FROM "Bookings_Rentings" WHERE "isRented"=\'false\''); //JOIN TABLE WITH booked to table.
+						$result = pg_query($db_connection, 'SELECT * FROM "Bookings_Rentings" WHERE "isRented"=\'true\' and "isActive"=\'true\''); //JOIN TABLE WITH booked to table.
 			            $i=0;
 			            while($row = pg_fetch_array($result)) {
 			            ?>
@@ -90,7 +90,7 @@
 			<hr>
 			<div class="container">
 			<br>
-		  	<h3>Customer Check In</h3>
+		  	<h3>Customer Check Out</h3>
 		  	<form method="post">
 			  <div class="form-row">
 			  	<div class="form-group col-md-4">
@@ -98,13 +98,13 @@
 			      <input type="number" name="bookingID" min="0" class="form-control" id="bookingID" value="0" required>
 			    </div>
 			    <div class="form-group col-md-8">
-			      <label for="checkin">Check in Date</label>
-			      <input type="date" placeholder="2019-01-01" value=<?php echo '"'.$row['checkin'].'"'?> name="checkin" class="form-control" id="checkin" required>
+			      <label for="checkout">Check out Date</label>
+			      <input type="date" placeholder="2019-01-01" value=<?php echo '"'.$row['checkin'].'"'?> name="checkin" class="form-control" id="checkout" required>
 			    </div>
 			  </div>
 			    
 			  </div>
-			  <button name="submit" class="btn btn-primary">Rent</button>
+			  <button name="submit" class="btn btn-primary">Checkout Customer</button>
 			</form>
 			<br>
 			<br>
@@ -117,8 +117,11 @@
 <?php  
 	
 	if(isset($_POST['submit'])){
-		pg_query($db_connection, 'UPDATE "Bookings_Rentings" SET "isRented"=true WHERE "bookingID"='.$array[$_POST['bookingID']][0].';');
+		pg_query($db_connection, 'UPDATE "Bookings_Rentings" SET "isActive"=false WHERE "bookingID"='.$array[$_POST['bookingID']][0].';');
+		pg_query($db_connection, 'UPDATE "Bookings_Rentings" SET "checkout"=\''.$_POST['checkout'].'\' WHERE "bookingID"='.$array[$_POST['bookingID']][0].';');
 		print($_POST['bookingID']);
+
+
 
 	}
 

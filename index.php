@@ -21,12 +21,13 @@
 
 			$result = pg_query($db_connection, 'SELECT "eSSN" FROM "Employee" WHERE "eSSN"='.$_SESSION['user_SSN']);
 			$columns = pg_fetch_row($result);
-
+		
 			if($columns == ""){
-				pg_query($db_connection, 'INSERT INTO "Customer" VALUES ('.$_SESSION['user_SSN'].', \'Address\', \'Name\', \'Role\');');
+				pg_query($db_connection, 'INSERT INTO "Employee" VALUES ('.$_SESSION['user_SSN'].', \'Address\', \'Name\', \'Role\');');
+				header( 'Location: employee.php');	
 			}
 
-			header( 'Location: employee.php');	
+			
 		}
 	}
 
@@ -46,6 +47,9 @@
 	<body>
 		<div id="signoutAlert" class="alert alert-success" role="alert">
 			  Successfully signed out!
+		</div>
+		<div id="successAlert" class="alert alert-success" role="alert">
+			  Room booking successful!
 		</div>
 
 		<section class="content">
@@ -75,6 +79,11 @@
 	
 		if(window.location.href.split("?")[1] == "signout=true"){
 			document.getElementById('signoutAlert').style.display='block';
+		}
+		document.getElementById('successAlert').style.display='none';
+	
+		if(window.location.href.split("?")[1] == "booksuccess=true"){
+			document.getElementById('successAlert').style.display='block';
 		}
 
 	</script>
